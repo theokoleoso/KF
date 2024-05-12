@@ -1,0 +1,54 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="contact-area default-padding">
+        <div class="container">
+            <div class="contact-items">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 contact-box left-info">
+                        <div class="form-items info-items" align="center">
+                            <h2>Verify OTP</h2>
+                            <form id="otpForm" method="POST" action="{% url 'verify_otp' %}" class="login contact-form">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-12 m-0 p-0">
+                                        {% if error_message %}
+                                            <div class="alert alert-error">
+                                                <strong>{{ error_message }}</strong>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input class="form-control" id="otp" name="otp" placeholder="Enter OTP" type="text" maxlength="5" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary">Verify</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('otpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var otpValue = document.getElementById('otp').value;
+            var formAction = "{% url 'verify_otp' %}" + "?otp=" + otpValue;
+            document.getElementById('otpForm').setAttribute('action', formAction);
+            document.getElementById('otpForm').submit();
+        });
+    </script>
+{% endblock %}
+

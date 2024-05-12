@@ -12,15 +12,43 @@
                             <h1>Add New Password</h1>
                             <form method="post">
                                 {% csrf_token %}
-                                {% bootstrap_form form %}
-                                <button type="submit" class="btn btn-success">Save</button>
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        {% if field.name == "password" %}
+                                        <a href="#" id="generate-password" class="generate-password-link" style="font-size: 12px; float: right; color: #41C9E2;" data-toggle="tooltip" title="A secure password will be automatically generated for you">Generate Password</a>
+                                            <div class="password-container">
+                                                {% bootstrap_field field class="form-control" %}
+                                                
+                                            </div>
+                                        {% else %}
+                                            {% bootstrap_field field class="form-control" %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                {% bootstrap_button "Save" button_type="submit" button_class="btn btn-success" %}
                                 <a href="{% url 'pass_list' %}" class="btn btn-secondary">Cancel</a>
                             </form>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("generate-password").addEventListener("click", function(event) {
+                event.preventDefault();
+                var length = 12;
+                var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;<>,.?/~";
+                var password = "";
+                for (var i = 0; i < length; i++) {
+                    password += charset.charAt(Math.floor(Math.random() * charset.length));
+                }
+                document.getElementById("id_password").value = password;
+                console.log(password);
+            });
+        });
+    </script>
+    
 {% endblock %}

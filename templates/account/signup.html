@@ -3,6 +3,22 @@
 {% load bootstrap4 %}
 
 {% block content %}
+<style>
+    .tooltip-inner {
+        background-color: #41C9E2;
+        color: #fff;
+        font-size: 12px;
+        border-radius: 4px;
+        padding: 8px 12px;
+        max-width: 250px;
+    }
+    
+    .arrow::before {
+        border-top-color: #41C9E2 !important;
+    }
+</style>
+
+
 <div class="contact-area default-padding">
     <div class="container">
         <div class="contact-items">
@@ -12,9 +28,22 @@
                         <h2>Sign Up</h2>
                         <form method="post">
                             {% csrf_token %}
-                            {% bootstrap_form form %}
-                            
-                            <!-- Optional: Redirect user to the URL they were trying to access prior to logging in -->
+                            {% for field in form %}
+                                {% if field.name == 'password1' %}
+                                    <div class="form-group">
+                                        <a href="#" id="generate-password" class="generate-password-link" style="font-size: 12px; float: right; color: #41C9E2;" data-toggle="tooltip" title="A secure password matching all the criteria will be generated and automatically copied to your clipboard. You can paste it to view the password.">Generate Password</a>
+                                        {% bootstrap_field field class="form-control" %}
+                                    </div>
+                                {% elif field.name == 'password2' %}
+                                    <div class="form-group">
+                                        {% bootstrap_field field class="form-control" %}
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
+                                        {% bootstrap_field field class="form-control" %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                             {% if redirect_field_value %}
                                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                             {% endif %}
@@ -39,4 +68,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("generate-password").addEventListener("click", function(event) {
+            event.preventDefault();
+            var length = 12;
+            var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;<>,.?/~";
+            var password = "";
+            for (var i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            document.getElementsByName("password1")[0].value = password;
+            document.getElementsByName("password2")[0].value = password;
+            
+            var tempInput = document.createElement("input");
+            tempInput.value = password;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        });
+    });
+</script>
 {% endblock %}
+
+

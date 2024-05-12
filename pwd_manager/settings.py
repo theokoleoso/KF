@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'bootstrap4',
     'users',
-    'pwdms'
+    'pwdms',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # Move it here
@@ -127,6 +128,8 @@ STATICFILES_DIRS = [
 # Specify the directory where Django will collect static files during deployment
 STATIC_ROOT = BASE_DIR / "static"
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -137,3 +140,16 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_URL = '/users/login'
+
+# LOGIN_URL = 'two_factor:login'
+
+
+OTP_TOTP_ISSUER = 'keyfortress'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your_email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your_email_password'

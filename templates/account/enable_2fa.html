@@ -1,0 +1,19 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="contact-area default-padding">
+    <div class="container">
+        <div class="contact-items">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 contact-box left-info">
+                    <div class="form-items info-items" align="center">
+                        <h2>Scan the QR code to enable Two-Factor Authentication (2FA)</h2>
+                        <img src="{{ user.user_otp_qrcode.url }}" alt="QR Code">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
